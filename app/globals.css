@@ -1,23 +1,21 @@
 @import "tailwindcss";
-
-:root {
-  --background: #f5f7f3;
-  --foreground: #183d34;
-  color-scheme: light;
-}
-
+:root { --background: #f6f8fa; --foreground: #23323d; color-scheme: light; }
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+html { scroll-behavior: smooth; }
+body { background: var(--background); color: var(--foreground); font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
+@layer components {
+  .panel { @apply rounded-xl border border-slate-200/80 bg-white shadow-[0_2px_8px_#25374604]; }
+  .section-title { @apply text-sm font-semibold tracking-tight; }
 }
-
-::selection { background: #c7f58a; color: #143f35; }
-a:focus-visible { outline: 2px solid #047857; outline-offset: 5px; border-radius: 4px; }
+::selection { background: #bce9dd; color: #155c50; }
+a:focus-visible { outline: 2px solid #0f766e; outline-offset: 4px; border-radius: 3px; }
+progress { display: block; width: 100%; height: 7px; overflow: hidden; border: 0; border-radius: 999px; background: #e2eeeb; }
+progress::-webkit-progress-bar { background: #e2eeeb; border-radius: 999px; }
+progress::-webkit-progress-value { background: #168676; border-radius: 999px; }
+progress::-moz-progress-bar { background: #168676; border-radius: 999px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

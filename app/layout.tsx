@@ -1,3 +1,5 @@
+import ProjectNavigation from "@/src/components/ProjectNavigation";
+import { isLocalRewardAdmin } from "@/src/lib/rewards/adminAccess";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -17,13 +19,13 @@ export const metadata: Metadata = {
   description: "Your health and wellness rewards dashboard. Move well, live well, earn energy.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col"><ProjectNavigation localAdmin={await isLocalRewardAdmin()} />{children}</body>
     </html>
   );
 }

@@ -1,0 +1,13 @@
+import Link from "next/link";
+import {isLocalRewardAdmin} from "@/src/lib/rewards/adminAccess";
+import {getSponsorCatalog} from "@/src/lib/campaigns/sponsorQueries";
+import {participantCampaignGroups} from "@/src/lib/campaigns/participantVisibility";
+import {describeRule} from "@/src/lib/campaigns/types";
+import {getRewardOverview} from "@/src/lib/redemptions/queries";
+export default async function MyCampaigns(){
+ if(!await isLocalRewardAdmin())return null;
+ const catalog=await getSponsorCatalog().catch(()=>null);const overview=await getRewardOverview().catch(()=>null);
+ if(!catalog)return <p id="my-campaigns" className="mt-5 text-sm text-amber-800">My campaigns unavailable. Check campaign setup.</p>;
+ const {joined}=participantCampaignGroups(catalog);
+ return <section id="my-campaigns" className="mt-6 scroll-mt-6 space-y-3"><div className="flex justify-between"><h2 className="section-title">My campaigns</h2><Link href="/rewards" className="text-xs text-teal-700">My rewards →</Link></div>{!joined.length&&<p className="text-sm text-slate-500">You haven’t joined a campaign yet. Explore available campaigns below.</p>}<div className="grid gap-3 md:grid-cols-2">{joined.map(c=>{const progress=overview?.campaigns.find(b=>b.campaign_id===c.id);const membership=catalog.participants.find(p=>p.campaign_id===c.id&&p.user_id===catalog.userId);return <article key={c.id} className="panel p-4"><h3 className="font-semibold">{c.name}</h3><p className="mt-1 text-xs text-slate-500">{catalog.organisations.find(o=>o.id===c.organisation_id)?.name}</p><p className="mt-2 text-xs">Joined · Participation: {membership?.status} · Campaign: {c.status}</p><p className="mt-2 text-xs">{c.start_date?.slice(0,10)??"No start date"} — {c.end_date?.slice(0,10)??"No end date"}</p>{progress?<><p className="mt-3 text-sm">Progress: {progress.activity_count} recorded activities · {progress.rewarded_activities} rewarded</p><p className="mt-1 text-xs text-slate-500">{(progress.distance_meters/1000).toFixed(2)} km · {Math.floor(progress.active_minutes)} active minutes · {progress.steps.toLocaleString("en-US")} steps</p><p className="mt-3 text-sm font-medium text-teal-700">{progress.earned.toLocaleString("en-US")} BKNE earned · {progress.distributed.toLocaleString("en-US")} distributed</p></>:<p className="mt-3 text-xs text-amber-800">Progress and earned balance unavailable. Check redemption migration setup.</p>}<ul className="mt-3 space-y-1 text-xs text-slate-500">{catalog.rules.filter(r=>r.campaign_id===c.id).map(r=><li key={r.id}>{r.activity_type}: {describeRule(r,"BKNE")}</li>)}</ul></article>})}</div></section>;
+}

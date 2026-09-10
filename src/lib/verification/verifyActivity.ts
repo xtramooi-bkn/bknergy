@@ -3,6 +3,7 @@ export type VerificationStatus = "VERIFIED" | "REVIEW" | "REJECTED";
 export interface VerificationActivity {
   type: string;
   source: string;
+  isManual?: boolean;
   distanceMeters: number;
   durationSeconds: number;
   gpsAvailable?: boolean;
@@ -20,7 +21,7 @@ export function verifyActivity(activity: VerificationActivity): VerificationResu
 
   if (!activity.gpsAvailable) score -= 20;
   if (activity.avgHeartRate == null) score -= 10;
-  if (activity.source.toLowerCase() === "manual") score -= 25;
+  if (activity.isManual === true || activity.source.toLowerCase() === "manual") score -= 25;
 
   const speedKmh = (activity.distanceMeters / activity.durationSeconds) * 3.6;
   if (activity.type.toLowerCase() === "running" && speedKmh > 25) {

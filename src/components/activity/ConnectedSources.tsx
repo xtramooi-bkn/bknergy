@@ -1,0 +1,4 @@
+const sources = [ ["Garmin", "Available integration"], ["Strava", "Available integration"], ["Apple Health", "Mobile connector"], ["Health Connect", "Mobile connector"] ];
+export default function ConnectedSources() {
+  return <section aria-labelledby="sources-title" className="panel mt-6 p-5"><h2 id="sources-title" className="section-title">Connected sources</h2><p className="mt-2 text-xs text-slate-500">Future connectors. Current activities use representative simulated data.</p><ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{sources.map(([name, description]) => <li key={name}><p className="text-sm font-medium">{name}</p><p className="mt-1 text-[11px] text-slate-500">{description}</p><span className="mt-2 inline-block rounded bg-slate-100 px-2 py-1 text-[10px] text-slate-600">Not connected</span></li>)}</ul></section>;
+}
