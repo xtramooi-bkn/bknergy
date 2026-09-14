@@ -36,5 +36,5 @@ test("campaign data remains public while joins stay local-only", () => {
   assert.match(challenges, /localAdmin\?<CampaignCommandForm/);
   assert.match(challenges, /c\.description/); assert.match(challenges, /c\.start_date/); assert.match(challenges, /c\.audience/);
   assert.doesNotMatch(mine, /if\(!await isLocalRewardAdmin\(\)\)return null/);
-  assert.match(mine, /read-only in the public demo/);
+  assert.match(mine, /Public preview · participant view/);
 });
