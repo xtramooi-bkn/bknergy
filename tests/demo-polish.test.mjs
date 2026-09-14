@@ -26,3 +26,15 @@ test("participant totals, transaction link, campaign labels, and safe balance fa
 test("admin controls remain local-only", () => {
   assert.match(distribution, /NODE_ENV==="development"/); assert.match(admin, /isLocalRewardAdmin/); assert.match(controls, /DownloadSigningPackage/); assert.match(controls, /Advanced \/ recovery/);
 });
+
+test("campaign data remains public while joins stay local-only", () => {
+  const challenges = fs.readFileSync("src/components/campaigns/AvailableChallenges.tsx", "utf8");
+  const mine = fs.readFileSync("src/components/campaigns/MyCampaigns.tsx", "utf8");
+  assert.doesNotMatch(challenges, /if\(!await isLocalRewardAdmin\(\)\)return/);
+  assert.match(challenges, /const localAdmin=await isLocalRewardAdmin\(\)/);
+  assert.match(challenges, /Demo preview — joining is disabled in the public demo/);
+  assert.match(challenges, /localAdmin\?<CampaignCommandForm/);
+  assert.match(challenges, /c\.description/); assert.match(challenges, /c\.start_date/); assert.match(challenges, /c\.audience/);
+  assert.doesNotMatch(mine, /if\(!await isLocalRewardAdmin\(\)\)return null/);
+  assert.match(mine, /read-only in the public demo/);
+});
