@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BKNergy
 
-## Getting Started
+**BKNergy transforms verified healthy behaviour into programmable tokenized rewards.**
 
-First, run the development server:
+Healthy behaviour creates value but is rarely directly rewarded. BKNergy turns verified activities into campaign-funded BKNE rewards for employers, governments, insurers, and sports or health brands.
+
+## How it works
+
+Activity → Verification → Campaign rule → Reward reservation → BKNE distribution through Brickken → Participant wallet → future redemption, donation, or spend concept.
+
+Brickken provides the tokenization infrastructure used to issue and distribute tokenized rewards.
+
+## Working proof
+
+- BKNE is deployed on Base Sepolia, with 10,000 BKNE minted to the treasury.
+- Participant whitelisting works and real BKNE rewards have been transferred on-chain.
+- BKNergy reconciles on-chain state back into reward state.
+
+## Architecture
+
+Tokenizer/Admin → Treasury → Participant
+
+The app uses Next.js, TypeScript, React, Supabase/Postgres, Brickken Sandbox API, and Base Sepolia.
+
+## Security and reward operations
+
+Private keys never enter the web app. The Brickken API key is server-only. Reward reservation, atomic submission claims, duplicate-payout protection, and recovery/reconciliation controls are retained in the distribution flow. Treasury signing is external and local: download a prepared package from local `/admin/rewards`, then run:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+node tools/local/sign-reward.mjs outputs/bknergy-reward-81-preparation.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The signer validates the exact Base Sepolia BKNE transfer and writes a raw signed transaction locally. It never broadcasts or stores a private key.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Local setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Install dependencies, configure the environment names below locally, run the required existing Supabase migrations, then use `npm run dev`. Admin distribution controls are intentionally local-development only and are unavailable in production.
 
-## Learn More
+Required environment variable names:
 
-To learn more about Next.js, take a look at the following resources:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_SECRET_KEY` or `SUPABASE_SERVICE_ROLE_KEY`
+- `BRICKKEN_SANDBOX_API_BASE_URL`
+- `BRICKKEN_SANDBOX_API_KEY`
+- `BRICKKEN_BASE_SEPOLIA_RPC_URL` (optional for treasury balance; required for historical reconciliation)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Named sponsor and campaign examples are concepts/demos unless explicitly stated otherwise. They do not imply a confirmed commercial partnership.

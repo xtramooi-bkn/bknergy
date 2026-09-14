@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local signing artifacts and sensitive key material
+outputs/*signed*.txt
+outputs/*preparation*.json
+*.key
+*.privatekey
+tools/local/*.secret*
+
+# Generated local Brickken artifacts
+/outputs/
+
+/outputs/

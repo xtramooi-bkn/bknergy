@@ -93,7 +93,7 @@ export default function DeploymentReview({ deployment }: { deployment: Deploymen
     ["Priority fee per gas", tx.maxPriorityFeePerGas + " wei"], ["Preparation ID", deployment.txId],
   ];
 
-  return <main className="mx-auto w-full max-w-4xl space-y-6 p-6 md:p-10">
+  return <main className="admin-surface mx-auto w-full max-w-4xl space-y-6 p-6 md:p-10">
     <div><p className="text-sm font-semibold text-amber-700">LOCAL DEVELOPMENT · SANDBOX</p>
       <h1 className="mt-2 text-3xl font-bold">Deploy BKNergy Reward</h1>
       <p className="mt-3">Review the prepared BKNE deployment. Submitting opens MetaMask for your explicit confirmation.</p>
