@@ -38,3 +38,13 @@ test("campaign data remains public while joins stay local-only", () => {
   assert.doesNotMatch(mine, /if\(!await isLocalRewardAdmin\(\)\)return null/);
   assert.match(mine, /Public preview · participant view/);
 });
+test("participant rewards remain public read-only while redemption writes stay local-only", () => {
+  const rewards = fs.readFileSync("app/rewards/page.tsx", "utf8");
+  const redemptions = fs.readFileSync("src/lib/redemptions/actions.ts", "utf8");
+  assert.doesNotMatch(rewards, /Participant rewards are available in the local development demo/);
+  assert.match(rewards, /const localAdmin=await isLocalRewardAdmin\(\)/);
+  assert.match(rewards, /Public preview — redemption actions are disabled/);
+  assert.match(rewards, /localAdmin\?<RedemptionForm/);
+  assert.match(rewards, /Latest reward/); assert.match(rewards, /Recent redemption requests/); assert.match(rewards, /Your receiving wallet/);
+  assert.match(redemptions, /if\(!await isLocalRewardAdmin\(\)\)return/);
+});
